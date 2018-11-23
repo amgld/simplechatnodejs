@@ -1,4 +1,4 @@
-# simplechatnodejs
+# simplechat-nodejs
 ### Простой чат, написанный на Nodejs
 
 v. 1.0.0 15.04.2017
