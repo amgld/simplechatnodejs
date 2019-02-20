@@ -12,6 +12,12 @@ body {
 div.hd {
   margin:auto; padding:5px; background:#090;
   color:white; text-align:center; font-size:14pt;}
+div.help {
+  font-size:14pt; position:absolute; top:5px; left:10px;}
+div.help a {
+  text-decoration:none; padding:2px; background:white; color:#090;}
+div.help a:hover {
+  cursor:pointer;}
 div.ms {
   padding:5px;}
 table.npTable {
@@ -31,52 +37,50 @@ p {
   padding:3pt 0px 3pt 0px; margin:0px;}
 </style>
 <script>
-"use strict";
-
 // Пароль, введенный в адресной строке браузера
-let pwd = location.search.slice(1);
+pwd = location.search.slice(1);
 
 // Автоматическое изменение количества строк в форме textarea
 function textar() {
-   let txtAr = document.getElementById("newPost");
+   var txtAr = document.getElementById('newPost');
    if (txtAr.scrollHeight > txtAr.clientHeight) txtAr.rows++;
 }
 // Отправка сообщения
 function putBeseda() {
    // Получение данных из формы
-   let newMss = document.getElementById("newPost").value;
-   document.getElementById("newPost").value = '';
-   document.getElementById("newPost").rows = 1;
+   var newMss = document.getElementById('newPost').value;
+   document.getElementById('newPost').value = '';
+   document.getElementById('newPost').rows = 1;
 
    // Публикуем информацию об отправке сообщения
-   let txtBs = document.getElementById("bes");
-   let bseda =
-      `<p><small>Ваше сообщение отправляется...</small></p>${txtBs.innerHTML}`;
+   var txtBs = document.getElementById('bes');
+   bseda = '<p><small>Ваше сообщение отправляется...</small></p>' +
+           txtBs.innerHTML;
    txtBs.innerHTML = bseda;
 
    // Асинхронный ajax к серверу
-   let zaprs = new XMLHttpRequest();
+   var zaprs = new XMLHttpRequest();
    zaprs.abort();
-   zaprs.open("POST", `?${pwd}^`, true);
+   zaprs.open('POST', '?'+pwd+'^', true);
    zaprs.onreadystatechange = function() {
       if (zaprs.readyState == 4)
          if(zaprs.status == 200) zaprs.abort();
    };
-   zaprs.setRequestHeader("Content-Type", "text-plain");
+   zaprs.setRequestHeader('Content-Type', 'text-plain');
    zaprs.send(newMss);
    newPost.focus();
 }
 // Получение текста беседы с сервера
 function getBeseda() {
-   let zapros = new XMLHttpRequest();
+   var zapros = new XMLHttpRequest();
    zapros.abort();
-   zapros.open("GET", `?${pwd}^`, true);
+   zapros.open('GET', '?'+pwd+'^', true);
    zapros.onreadystatechange = function() {
       if (zapros.readyState == 4)
          if(zapros.status == 200) {
-            let beseda = zapros.responseText;
-            let txtBes = document.getElementById("bes");
-            txtBes.innerHTML = beseda;
+            beseda = zapros.responseText;
+            var txtBes = document.getElementById('bes');
+            txtBes.innerHTML = beseda;            
          }
    };
    if (!document.hidden) zapros.send(null);
@@ -84,10 +88,13 @@ function getBeseda() {
 }
 </script>
 </head>
-<body onLoad="getBeseda();">
+<body onLoad='getBeseda();'>
 
 <!-- Заголовочная строка -->
 <div class=hd>{{userFIO}}</div>
+
+<!-- Ссылка на файл помощи -->
+<div class=help><a href="?help" target="_blank">&#10067;</a></div>
 
 <!-- Форма добавления нового сообщения -->
 <table class='npTable' cellspacing=0px>
